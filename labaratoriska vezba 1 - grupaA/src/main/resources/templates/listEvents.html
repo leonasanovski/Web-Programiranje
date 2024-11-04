@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Event Booking page - Welcome and choose an Event</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+</header>
+<main>
+
+    <h2>Choose an event:</h2>
+    <form th:action="@{/}" th:method="POST">
+        <div th:each="event : ${event_list}">
+            <label>
+                <input th:type="radio" th:value="${event.name}" name="selectedEvent">
+                Name: <span th:text="${event.name}"></span>, Description: <span th:text="${event.description}"></span>,
+                Rating: <span th:text="${event.popularityScore}"></span>,
+            </label>
+            <br/>
+        </div>
+        <h2>Choose number of tickets:</h2>
+        <input type="number" name="numTickets" min="1" max="10"><br/>
+        <h2>User Name: </h2>
+        <input type="text" name="username"><br/>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div>
+        <h1>Active sessions:</h1>
+        <p th:text="${activeSessions}"></p>
+    </div>
+</main>
+</body>
+</html>
