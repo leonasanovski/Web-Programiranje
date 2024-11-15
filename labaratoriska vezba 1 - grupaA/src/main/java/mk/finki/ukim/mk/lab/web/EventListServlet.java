@@ -47,16 +47,16 @@ public class EventListServlet extends HttpServlet {
                 .stream()
                 .filter(event -> event.getName().contains(text) && event.getPopularityScore() >= rating)
                 .toList());
-        wc.setVariable("activeSessions", SessionListener.getActiveSessions());
+//        wc.setVariable("activeSessions", SessionListener.getActiveSessions());
         templateEngine.process("listEvents.html",wc,resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().setAttribute("selected_event",req.getParameter("selectedEvent"));
-        req.getSession().setAttribute("num_of_tickets",req.getParameter("numTickets"));
-        req.getSession().setAttribute("user_name",req.getParameter("username"));
-
-        resp.sendRedirect("/eventBooking");
+//        req.getSession().setAttribute("selected_event",req.getParameter("selectedEvent"));
+//        req.getSession().setAttribute("num_of_tickets",req.getParameter("numTickets"));
+//        req.getSession().setAttribute("user_name",req.getParameter("username"));
+//
+//        resp.sendRedirect("/eventBooking");
     }
 }
