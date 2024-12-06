@@ -139,6 +139,17 @@
         </div>
         <input type="submit" value="Search" class="button-primary">
     </form>
+    <form th:action="@{/events/filter_events_by_tags}" th:method="POST" class="search-form">
+        <h2>Select Tags</h2>
+        <select id="tag" name="tagId" required multiple>
+            <option
+                    th:each="tag : ${tags}"
+                    th:text="${tag.getTag_name()}"
+                    th:value="${tag.getId()}">
+            </option>
+        </select>
+        <input type="submit" value="Search" class="button-primary">
+    </form>
     <h2>Choose an event:</h2>
 
     <form th:action="@{/events/book_event}" th:method="POST">
@@ -150,6 +161,7 @@
                 <th>Description</th>
                 <th>Rating</th>
                 <th>Location</th>
+                <th>Tags</th>
                 <th>Delete</th>
                 <th>Edit</th>
             </tr>
@@ -163,6 +175,10 @@
                 <td th:text="${event.description}">Description</td>
                 <td th:text="${event.popularityScore}">Rating</td>
                 <td th:text="${event.location != null ? event.location.name : 'No location added'}">Location</td>
+                <td>
+                    <span th:each="tag : ${event.getTags_of_event()}" th:text="${tag.getTag_name()}">Tag Name</span>
+                </td>
+
                 <td>
                     <a th:href="@{/events/delete/{id}(id=${event.getId()})}" class="btn btn-sm btn-danger" role="button">
                         Delete

@@ -3,29 +3,56 @@ package mk.finki.ukim.mk.lab.web.controller;
 import jakarta.servlet.http.HttpSession;
 import mk.finki.ukim.mk.lab.model.Event;
 import mk.finki.ukim.mk.lab.model.Location;
+import mk.finki.ukim.mk.lab.model.Tag;
 import mk.finki.ukim.mk.lab.service.EventService;
 import mk.finki.ukim.mk.lab.service.LocationService;
+import mk.finki.ukim.mk.lab.service.TagService;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/events")
 public class EventController {
     private final EventService eventService;
     private final LocationService locationService;
-
-    public EventController(EventService eventService, LocationService locationService) {
+    private final TagService tagService;
+    public EventController(EventService eventService, LocationService locationService, TagService tagService) {
         this.eventService = eventService;
         this.locationService = locationService;
+        this.tagService = tagService;
     }
 
     @GetMapping()
     public String getEventsPage(@RequestParam(required = false) String error, Model model){
         List<Event> eventList = this.eventService.listAll();
+        List<Tag> tag_list = this.tagService.get_all_tags();
         model.addAttribute("event_list", eventList);
+        model.addAttribute("tags",tag_list);
         return "listEvents";
+    }
+    @PostMapping("/filter_events_by_tags")
+    public String filterList(@RequestParam(required = false) List<Long> tagId,
+                             Model model){
+        List<Tag> tag_list = this.tagService.get_all_tags();
+        if (tagId.isEmpty()){
+            model.addAttribute("event_list",this.eventService.listAll());
+            model.addAttribute("tags",tag_list);
+        }else{
+            List<Event> events_filtered ;
+            events_filtered = this.eventService.listAll()
+                    .stream()
+                    .filter(event -> event.getTags_of_event().stream()
+                            .anyMatch(tag -> tagId.contains(tag.getId())))
+                    .toList();
+            model.addAttribute("event_list",events_filtered);
+            model.addAttribute("tags",tag_list);
+        }
+       return "listEvents";
+
     }
     @PostMapping("/filter_events")
     public String filterList(@RequestParam(required = false) String txt,
