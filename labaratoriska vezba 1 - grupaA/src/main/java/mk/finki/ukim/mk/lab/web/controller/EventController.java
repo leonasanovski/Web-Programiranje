@@ -63,7 +63,6 @@ public class EventController {
                             @RequestParam String description,
                             @RequestParam Double popularityScore,
                             @RequestParam Long locationId) {
-
         eventService.save_event(id, name, description, popularityScore, locationId);
         return "redirect:/events"; // Redirect to the events list
     }

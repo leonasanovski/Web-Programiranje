@@ -1,7 +1,8 @@
 package mk.finki.ukim.mk.lab.service.implementation;
 
 import mk.finki.ukim.mk.lab.model.Location;
-import mk.finki.ukim.mk.lab.repository.LocationRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.EventRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.LocationRepository;
 import mk.finki.ukim.mk.lab.service.LocationService;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,18 @@ public class LocationServiceImplementation implements LocationService {
 
     @Override
     public void delete(Long id) {
-        this.locationRepository.delete_location(id);
+        this.locationRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Location> save_location(String name, String address, String capacity, String description) {
-        return this.locationRepository.save_new_location(name,address,capacity,description);
+    public void save_location(String name, String address, String capacity, String description) {
+        Location location = new Location(name,address,capacity,description);
+        this.locationRepository.save(location);
     }
+
+    @Override
+    public Optional<Location> findById(Long id) {
+        return locationRepository.findById(id);
+    }
+
 }
