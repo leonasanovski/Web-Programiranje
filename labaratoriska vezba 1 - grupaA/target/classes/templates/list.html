@@ -142,9 +142,11 @@
         <td th:text="${location.description}">Description</td>
         <td th:text="${location.capacity}">Rating</td>
         <td>
+
           <a th:href="@{/locations/delete/{id}(id=${location.getId()})}" class="btn btn-sm btn-danger" role="button">
             Delete
           </a>
+
         </td>
       </tr>
       </tbody>
@@ -153,6 +155,8 @@
   <div>
     <a th:href="@{/locations/add-loc}" class="button-add">Add New Location</a>
   </div>
+
+
 </main>
 </body>
 </html>

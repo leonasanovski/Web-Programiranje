@@ -139,17 +139,6 @@
         </div>
         <input type="submit" value="Search" class="button-primary">
     </form>
-    <form th:action="@{/events/filter_events_by_tags}" th:method="POST" class="search-form">
-        <h2>Select Tags</h2>
-        <select id="tag" name="tagId" required multiple>
-            <option
-                    th:each="tag : ${tags}"
-                    th:text="${tag.getTag_name()}"
-                    th:value="${tag.getId()}">
-            </option>
-        </select>
-        <input type="submit" value="Search" class="button-primary">
-    </form>
     <h2>Choose an event:</h2>
 
     <form th:action="@{/events/book_event}" th:method="POST">
@@ -161,7 +150,6 @@
                 <th>Description</th>
                 <th>Rating</th>
                 <th>Location</th>
-                <th>Tags</th>
                 <th>Delete</th>
                 <th>Edit</th>
             </tr>
@@ -176,26 +164,28 @@
                 <td th:text="${event.popularityScore}">Rating</td>
                 <td th:text="${event.location != null ? event.location.name : 'No location added'}">Location</td>
                 <td>
-                    <span th:each="tag : ${event.getTags_of_event()}" th:text="${tag.getTag_name()}">Tag Name</span>
-                </td>
-
-                <td>
-                    <a th:href="@{/events/delete/{id}(id=${event.getId()})}" class="btn btn-sm btn-danger" role="button">
-                        Delete
-                    </a>
+                    <th:block sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/events/delete/{id}(id=${event.getId()})}" class="btn btn-sm btn-danger" role="button">
+                            Delete
+                        </a>
+                    </th:block>
                 </td>
 
                 <td class="action-buttons">
-                    <a th:href="@{/events/edit/{id} (id=${event.getId()})}" class="btn btn-sm btn-info">
-                        Edit
-                    </a>
+                    <th:block sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/events/edit/{id} (id=${event.getId()})}" class="btn btn-sm btn-info">
+                            Edit
+                        </a>
+                    </th:block>
                 </td>
             </tr>
             </tbody>
         </table>
-        <div>
-            <a th:href="@{/events/add-form}" class="button-add">Add New Event</a>
-        </div>
+        <th:block sec:authorize="hasRole('ADMIN')">
+            <div>
+                <a th:href="@{/events/add-form}" class="button-add">Add New Event</a>
+            </div>
+        </th:block>
         <h2>Choose number of tickets:</h2>
         <input type="number" name="numTickets" min="1" max="10" placeholder="Enter number of tickets"><br/>
 
@@ -205,10 +195,11 @@
         <input type="submit" value="Submit">
     </form>
 
-<!--    <div class="active-sessions">-->
-<!--        <h1>Active Sessions:</h1>-->
-<!--        <p th:text="${activeSessions}"></p>-->
-<!--    </div>-->
+    <div>
+        <a class="btn btn-light btn-sm ml-3" href="/logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+    </div>
 </main>
 </body>
 </html>
